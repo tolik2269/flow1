@@ -3,87 +3,73 @@ package com.company;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Arrays;
 
 public class Main {
 
-    public static <text> void main(String[] args) {
-        StringBuilder sb = new StringBuilder();
+    private static final StringBuilder LOG = new StringBuilder("");
 
-        File dir1 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games");
-        File dir = new File("Games");
-        if (dir1.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir2 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//src");
-          if (dir2.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir3 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//res");
-               if (dir3.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir4 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//savegames");
-        if (dir4.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir5 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//temp");
-        if (dir5.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir6 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//src//main");
-        if (dir6.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir7 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//src//test");
-        if (dir7.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir8 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//res//drawables");
-        if (dir8.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir9 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//res//vectors");
-        if (dir9.mkdir()) {
-            sb.append("Папка создана \n");
-        }
-        File dir10 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//res//icons");
-        if (dir10.mkdir()) {
-            sb.append("Папка создана \n");
+    public static void main(String[] args) {
+        String userHomeDir = System.getProperty("user.home");
+        String dirPathToInstallGame = userHomeDir + File.separator + "Games";
+        File dirToInstallGames = new File(dirPathToInstallGame);
+        dirToInstallGames.mkdirs();
+        LOG.append("Directory '" + dirToInstallGames.getAbsolutePath() + "' is created\n");
+
+        for (String gameDir: Arrays.asList("src", "res", "savegames", "temp")) {
+            String gamesInternalDir = dirPathToInstallGame + File.separator + gameDir;
+            if (new File(gamesInternalDir).mkdir()) {
+                LOG.append("Game directory " + gamesInternalDir + " has been created\n");
+            } else {
+                LOG.append("WARN: Game directory " + gamesInternalDir + " hasn't been created or directory already exists\n");
+            }
         }
 
+        String gameSrcDir = dirPathToInstallGame + File.separator + "src";
+        for (String srcDirectory : Arrays.asList("main", "test")) {
+            String gamesSrcDir = dirPathToInstallGame + File.separator + "src" + File.separator + srcDirectory;
+            if (new File(gamesSrcDir).mkdir()) {
+                LOG.append("Game src directory " + gamesSrcDir + " has been created\n");
+            } else {
+                LOG.append("WARN: Game src directory " + gamesSrcDir + " hasn't been created or directory already exists\n");
+            }
+        }
 
-        File myFile = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//src//main//Main.java");
+        String gameJavaSourcesDir = gameSrcDir + File.separator + "main";
+        for (String gameJavaClass : Arrays.asList("Main.java", "Utils.java")) {
+            String javaClassFilePath = gameJavaSourcesDir + File.separator + gameJavaClass;
+            try {
+                if (new File(javaClassFilePath).createNewFile()) {
+                    LOG.append("Game java class '" + javaClassFilePath + "' has been created\n");
+                } else {
+                    LOG.append("WARN: Game java class '" + javaClassFilePath + "' hasn't been created or file already exists\n");
+                }
+            } catch (IOException ex) {
+                LOG.append("Something went wrong on creation file '" + javaClassFilePath + "'. Exception: " + ex.getMessage());
+            }
+        }
+
+        String resGameDirectory = dirPathToInstallGame + File.separator + "res";
+        for (String dirInTheRes: Arrays.asList("drawables", "vectors", "icons")) {
+            String resDirectory = resGameDirectory + File.separator + dirInTheRes;
+            if (new File(resDirectory).mkdir()) {
+                LOG.append("Resource directory " + resDirectory + "has been created\n");
+            } else {
+                LOG.append("WARN: Resource directory " + resDirectory + "hasn't been created or directory already exists\n");
+            }
+        }
+
+        String logFilePath = dirPathToInstallGame + File.separator + "temp" + File.separator + "temp.txt";
+        File logFile = new File(logFilePath);
         try {
-            if (myFile.createNewFile()) ;
-            sb.append("Файл был создан \n");
-        }catch (IOException ex) {
-            sb.append(ex.getMessage());
-        }
-        File myFile2 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//src//main//Utils.java");
-        try {
-            if (myFile2.createNewFile()) ;
-            sb.append("Файл был создан \n");
-        }catch (IOException ex) {
-            sb.append(ex.getMessage());
-        }
-        File myFile3 = new File("C://Users//Anato//Рабочий стол//задчи по джаве//Games//temp//temp.txt");
-        try {
-            if (myFile3.createNewFile()) ;
-            sb.append("Файл был создан \n");
-        }catch (IOException ex) {
-            sb.append(ex.getMessage());
-        }
-        System.out.println(sb.toString());
-
-        String text= "Папка создана, файл созден";
-        try (FileWriter writer = new FileWriter ("C://Users//Anato//Рабочий стол//задчи по джаве//Games//temp//temp.txt", false)) {
-    writer.write(text);
-    writer.append('\n');
-    writer.append('!');
-    writer.flush();
+            logFile.createNewFile();
+            FileWriter writerToLogFile = new FileWriter(logFile, true);
+            writerToLogFile.write(LOG.toString());
+            writerToLogFile.flush();
         } catch (IOException ex) {
-         System.out.println(ex.getMessage());
+            System.out.println("Can't write log to file '" + logFilePath + "'. Log will be written to STDOUT");
+            System.out.print(LOG.toString());
         }
     }
-        }
-
+}
